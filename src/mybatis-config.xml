@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "mybatis-3-config.dtd">
+<configuration>
+<properties>
+	<property name="username" value="root"/>
+  	<property name="password" value="123456"/>
+  	<property name="url" value="jdbc:mysql://localhost:3306/test"/>
+  	<property name="driver" value="com.mysql.jdbc.Driver"/>
+</properties>
+
+<environments default="development">
+<environment id="development">
+	<transactionManager type="JDBC">
+
+	</transactionManager>
+	<dataSource type="POOLED">
+	  <property name="driver" value="${driver}"/>
+	  <property name="url" value="${url}"/>
+	  <property name="username" value="${username}"/>
+	  <property name="password" value="${password}"/>
+	</dataSource>
+</environment>
+</environments>
+
+<!-- 
+此处可以用VENDOR或DB_VENDOR,前者是为了兼容之前的版本，
+property中的name是jdbc驱动中通过getDatabaseProductName获取到的字符串
+value值是为了在mapper映射文件中引用的字符串名字。
+优先原则是：找到databaseId值为value指定的值，否则匹配databaseId为空的
+ -->
+<databaseIdProvider type="DB_VENDOR">
+  <property name="SQL Server" value="sqlserver"/>
+  <property name="DB2" value="db2"/>        
+  <property name="Oracle" value="oracle" />
+  <property name="MySQL" value="mysql" />
+</databaseIdProvider>
+
+<!-- 
+我们看到现在UserManager.xml映射文件中，resultType仍然使用的完全限定名，为了避免这种冗余。可以使用typeAliases来指定别名.
+这样在映射文件中就可以直接使用别名，resultType=“User”就可以了。
+
+另外别名也可以使用package类型来表示，就是说可以指定一个包名，MyBatis 会在包名下面搜索需要的 Java Bean。
+每一个在包com.bluedream.mybatis.demo中的 Java Bean，在没有注解的情况下，会使用 Bean 的首字母小写的非限定类名来作为它的别名。
+比如 com.bluedream.mybatis.demo.User 的别名为 user；若有注解，则别名为其注解值。看下面的例子：
+@Alias("author")
+public class Author {
+    ...
+}
+
+<typeAliases>
+<package name="com.bluedream.mybatis.demo"/>
+</typeAliases>
+
+<typeAliases>
+	<typeAlias alias="User" type="com.bluedream.mybatis.demo.User"></typeAlias>
+</typeAliases>
+ -->
+<!-- 
+typeHandlers和上面的typeAliases配置差不多，也是有两种方式,方式如下。
+javaType和jdbcType的指定都有两种方式，可以在这里指定，也可以在自定义Handler中通过注释进行指定。
+
+需要注意的是通过包即搜索方式的，只能通过注释进行指定。
+<typeHandlers>
+	<typeHandler handler="" javaType="" jdbcType="" />
+	
+</typeHandlers>
+ <typeHandlers>
+ 	<package name=""/>
+ </typeHandlers>
+--> 
+<mappers>
+	<mapper resource="com/bluedream/mybatis/demo/UserManager.xml"/>
+</mappers>
+
+</configuration>

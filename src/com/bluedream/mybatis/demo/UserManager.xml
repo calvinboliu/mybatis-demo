@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd">
+<mapper namespace="com.bluedream.mybatis.demo.UserManager">
+
+<select id="selectUser" databaseId="hsql" resultType="com.bluedream.mybatis.demo.User">
+  SELECT * FROM db_user WHERE ID = #{id}
+</select>
+
+<select id="selectUser" databaseId="mysql" resultType="com.bluedream.mybatis.demo.User">
+  SELECT * FROM db_user WHERE ID = #{id}
+</select>
+
+	<insert id="insertUser" parameterType="com.bluedream.mybatis.demo.User">
+		insert into db_user(name,pwd)values(#{name},#{pwd})
+	</insert>
+
+<update id="updateUser" parameterType="com.bluedream.mybatis.demo.User">
+	update db_user set name=#{name} pwd=#{pwd} where id=#{id}
+</update>
+
+<delete id="deleteUser" parameterType="int" >
+	delete from db_user where id=#{id}
+</delete>
+</mapper>
